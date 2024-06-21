@@ -25,7 +25,7 @@ R =  [10];              % Correlation range (m) if length(R)=1 the fixed range, 
 res =  R(1)/3;          % resolution in depth, should be <=R(1)/3 (m)
 
 % Difine hiatus
-Depth_of_hiatus = [35 55 75];          % (m) if Depth_of_hiatus = [] no hiatus.
+Depth_of_hiatus = [40];          % (m) if Depth_of_hiatus = [] no hiatus.
 duration_of_hiatus = [10 400];         % Duration of the hiatus (ka)
 h_correlated = 1;                      % if h_correlated=1 then the accumulations rates before and after each hiati are correlated, elles they are not.
 
@@ -38,7 +38,7 @@ simple=[0.001 0.05];    % if pf=1 mean and std, if pf=2 min max erotion rate, on
 n = 2;                  % if n=1 fit both Al and Be, if n=2 Al/Be
 
 % Extended Metropolish Sampling settings
-options.mcmc.nite=1e3;               % Number if iterations
+options.mcmc.nite=1e4;               % Number if iterations
 options.mcmc.i_sample=100;           % Number of interations between saving the sample
 options.mcmc.i_plot=10000;           % Number of iterations between updating plots
 options.mcmc.i_save_workspace=1e15;  % Number of iterations between saving the complete workspace
@@ -329,13 +329,14 @@ else
     hiatus=[];
 end
 
-
+%%
 tat = diff(dd).*acr(nrburn:end,:); %  durating of each interval (kyr)
 tat(:,1)=top_age(nrburn:end);
 if length(hiatus)>0
     tat(:,isnan(tat(1,:))) = hiatus(nrburn:end,:);
 end
 age=[cumsum(tat')]; % true age (kyr)
+acrate=tat(2:end,2:end)'./diff(dd(2:end))';
 depth=dd(2:end);
 
 
@@ -497,6 +498,13 @@ end
 ylim([0 endd])
 xlabel('Age (ka)');ylabel('Depth (m)');set(gca,'Xdir','reverse','Ydir','reverse')
 end
+
+figure;hold on;
+depth2=depth(1:end-1)+diff(depth)/2;
+fill([prctile(1./acrate',97.7), prctile(1./acrate(end:-1:1,:)',2.3)],[depth2, depth2(end:-1:1)],[0 0.4470 0.7410],'EdgeColor',[1 1 1],'EdgeAlpha',0.1,'FaceAlpha',0.15)
+fill([prctile(1./acrate',84.1), prctile(1./acrate(end:-1:1,:)',15.9)],[depth2, depth2(end:-1:1)],[0 0.4470 0.7410],'EdgeColor',[1 1 1],'EdgeAlpha',0.1,'FaceAlpha',0.25)
+plot(prctile(1./acrate',50),depth2','k','LineWidth',1.5);
+xlabel('Accumulation rate (m/ka)');ylabel('Depth (m)');set(gca,'Ydir','reverse')
 
 %% save age-depth model and posterior data
 
