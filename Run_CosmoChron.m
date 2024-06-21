@@ -478,7 +478,15 @@ ylim([0 endd*1.05])
 xlabel('Age (ka)');ylabel('Depth (m)');set(gca,'Xdir','reverse','Ydir','reverse')
 end
   
-
+figure;hold on;
+acrate=diff(age)./diff(depth');
+depth2=depth(1:end-1)+diff(depth)/2;
+fill([prctile(1./acrate',97.7), prctile(1./acrate(end:-1:1,:)',2.3)],[depth2, depth2(end:-1:1)],[0 0.4470 0.7410],'EdgeColor',[1 1 1],'EdgeAlpha',0.1,'FaceAlpha',0.15)
+fill([prctile(1./acrate',84.1), prctile(1./acrate(end:-1:1,:)',15.9)],[depth2, depth2(end:-1:1)],[0 0.4470 0.7410],'EdgeColor',[1 1 1],'EdgeAlpha',0.1,'FaceAlpha',0.25)
+plot(prctile(1./acrate',50),depth2','k','LineWidth',1.5);
+xlabel('Accumulation rate (m/ka)');ylabel('Depth (m)');set(gca,'Ydir','reverse')
+ 
+%save data
 %% save the age-depth model
 
 CosmoChron_95Lower=prctile(age',2.3)';
@@ -489,3 +497,13 @@ CosmoChron_95Upper=prctile(age',97.7)';
 CosmoChron_Depth=depth';
 T = table(CosmoChron_Depth,CosmoChron_95Lower,CosmoChron_68Lower,CosmoChron_Median,CosmoChron_68Upper,CosmoChron_95Upper);
 writetable(T,filename)
+
+%% accumulation rates
+CosmoChron_95Lower=prctile(1./acrate',2.3)';
+CosmoChron_68Lower=prctile(1./acrate',15.9)';
+CosmoChron_Median=prctile(1./acrate',50)';
+CosmoChron_68Upper=prctile(1./acrate',84.1)';
+CosmoChron_95Upper=prctile(1./acrate',97.7)';
+CosmoChron_Depth=depth2';
+T2 = table(CosmoChron_Depth,CosmoChron_95Lower,CosmoChron_68Lower,CosmoChron_Median,CosmoChron_68Upper,CosmoChron_95Upper);
+writetable(T2,'accumulation rates')
