@@ -393,7 +393,7 @@ for i=1:length(Al)
     plot([prctile(be(:,i),15.9) prctile(be(:,i),15.9)],[depth_of_comogenic_nuclides(i)-w, depth_of_comogenic_nuclides(i)+w],'Color',[1 1 1]*ggg,'LineWidth',0.5)
     plot([prctile(be(:,i),97.7) prctile(be(:,i),97.7)],[depth_of_comogenic_nuclides(i)-w, depth_of_comogenic_nuclides(i)+w],'Color',[1 1 1]*ggg,'LineWidth',0.5)
     plot([prctile(be(:,i),2.3) prctile(be(:,i),2.3)],[depth_of_comogenic_nuclides(i)-w, depth_of_comogenic_nuclides(i)+w],'Color',[1 1 1]*ggg,'LineWidth',0.5)
-        errorbar(Be,depth_of_comogenic_nuclides,[],[],uncertaintes_10Be,uncertaintes_10Be,'.k');
+        errorbar(Be(:),depth_of_comogenic_nuclides(:),[],[],uncertaintes_10Be(:),uncertaintes_10Be(:),'.k');
         xlabel('^1^0Be [atoms/g]');ylabel('Depth (m)'); ylim([0 max(depth)]);set(gca,'Ydir','reverse','XScale', 'log')
 end
 h(2)=subplot(132);hold on
@@ -406,7 +406,7 @@ for i=1:length(Al)
     plot([prctile(al(:,i),15.9) prctile(al(:,i),15.9)],[depth_of_comogenic_nuclides(i)-w, depth_of_comogenic_nuclides(i)+w],'Color',[1 1 1]*ggg,'LineWidth',0.5)
     plot([prctile(al(:,i),97.7) prctile(al(:,i),97.7)],[depth_of_comogenic_nuclides(i)-w, depth_of_comogenic_nuclides(i)+w],'Color',[1 1 1]*ggg,'LineWidth',0.5)
     plot([prctile(al(:,i),2.3) prctile(al(:,i),2.3)],[depth_of_comogenic_nuclides(i)-w, depth_of_comogenic_nuclides(i)+w],'Color',[1 1 1]*ggg,'LineWidth',0.5)
-        errorbar(Al,depth_of_comogenic_nuclides,[],[],uncertaintes_26Al,uncertaintes_26Al,'.k');
+        errorbar(Al(:),depth_of_comogenic_nuclides(:),[],[],uncertaintes_26Al(:),uncertaintes_26Al(:),'.k');
         xlabel('^2^6Al [atoms/g]'); ylim([0 max(depth)]);set(gca,'Ydir','reverse','XScale', 'log')
 end
 
@@ -423,7 +423,7 @@ for i=1:length(Al)
     plot([prctile(albe(:,i),97.7) prctile(albe(:,i),97.7)],[depth_of_comogenic_nuclides(i)-w, depth_of_comogenic_nuclides(i)+w],'Color',[1 1 1]*ggg,'LineWidth',0.5)
     plot([prctile(albe(:,i),2.3) prctile(albe(:,i),2.3)],[depth_of_comogenic_nuclides(i)-w, depth_of_comogenic_nuclides(i)+w],'Color',[1 1 1]*ggg,'LineWidth',0.5)
 end
-ratioer=sqrt((1./Be(:)).^2.*uncertaintes_26Al.^2 + (Al(:)./Be(:).^2).^2.*uncertaintes_10Be(:).^2);
+ratioer=sqrt((1./Be(:)).^2.*uncertaintes_26Al(:).^2 + (Al(:)./Be(:).^2).^2.*uncertaintes_10Be(:).^2);
 errorbar(Al./Be,depth_of_comogenic_nuclides,[],[],ratioer,ratioer,'.k');
 xlabel('^2^6Al/^1^0Be');ylabel('Depth (m)'); ylim([0 max(depth)]);set(gca,'Ydir','reverse')
 end
