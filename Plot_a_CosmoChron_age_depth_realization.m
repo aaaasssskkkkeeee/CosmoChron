@@ -117,7 +117,7 @@ if  length(R)>1 % Variable correlation range
     prior{im}.name='R';
     prior{im}.min=R(1); % in meters
     prior{im}.max=R(2);
-    prior{im}.prior_master=[1:length(Depth_of_hiatus)+1];
+    prior{im}.prior_master=k2;
 end
 
 
