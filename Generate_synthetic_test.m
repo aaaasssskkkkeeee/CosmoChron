@@ -29,7 +29,7 @@ restrue =       R(1)/10;     % Resolution, should be at least rantrue(1)/3 (m)
 % Difine hiatus
 Depth_of_hiatus = [35 55 75];          % (m) % the first defines the top/starting depth, if Depth_of_hiatus = [] no hiatus.
 duration_of_hiatus = [10 500];         % Duration of the hiatus (ka)
-h_correlated = 1;                      % if h_correlated=1 then the accumulations rates before and after each hiati are correlated, elles they are not.
+h_correlated = 1;                      % if h_correlated=1 then the accumulations rates before and after each hiati are correlated, elles they are not. Note that the code does not work when h_correlated = 0, while including hiasuses and a variable R
 
 % define constants
 rho  =2;                               % density at the burial site (g/cm^3)
@@ -205,7 +205,7 @@ if  length(R)>1 % Variable correlation range
     prior{im}.name='R';
     prior{im}.min=R(1); % in meters
     prior{im}.max=R(2);
-    prior{im}.prior_master=[1:length(Depth_of_hiatus)+1];
+    prior{im}.prior_master=k2;
 end
 
 
