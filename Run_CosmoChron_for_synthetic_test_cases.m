@@ -21,16 +21,16 @@ endd= 100;                 % Depth at the bottom of the age-depth model (m)
 % accumulation process settings
 meanacrate = 10;        % Mean inverse accumulation rate (kyr/m)
 varac = 100;            % Variance on the inverse accumulation rate (kyr^2/m^2)
-R =  [10];              % Correlation range (m) if length(R)=1 the fixed range, if length(R)=2 then unifom distributed correlation range with R=[min max] (variable R), R must be < endd-topd
+R =  [10 30];              % Correlation range (m) if length(R)=1 the fixed range, if length(R)=2 then unifom distributed correlation range with R=[min max] (variable R), R must be < endd-topd
 res =  R(1)/3;          % resolution in depth, should be <=R(1)/3 (m)
 
 % Difine hiatus
-Depth_of_hiatus = [40];          % (m) if Depth_of_hiatus = [] no hiatus.
+Depth_of_hiatus = [40 75];          % (m) if Depth_of_hiatus = [] no hiatus.
 duration_of_hiatus = [10 400];         % Duration of the hiatus (ka)
 h_correlated = 1;                      % if h_correlated=1 then the accumulations rates before and after each hiati are correlated, elles they are not. Note that the code does not work when h_correlated = 0, while including hiasuses and a variable R
 
 % pre-burial settings
-n2= 2;                  % if n2=1 complex preburial history , if n2=2 simple (norm distributed steady erotion rate)
+n2= 1;                  % if n2=1 complex preburial history , if n2=2 simple (norm distributed steady erotion rate)
 pf= 2;                  % prior distibution of erotion rate, if 1 normal, if 2 uniform, only have effect if n2=2
 simple=[0.001 0.05];    % if pf=1 mean and std, if pf=2 min max erotion rate, only have effect if n2=2
 
@@ -194,13 +194,14 @@ if  length(R)>1 % Variable correlation range
     prior{im}.name='R';
     prior{im}.min=R(1); % in meters
     prior{im}.max=R(2);
-    prior{im}.prior_master=k2;
+    prior{im}.prior_master=1:k2;
 end
 
 % SETUP DATA
 % Use test data from truetofit.m to define data
-nd=1; % index of data
+nd=0; % index of data
 if forward.n_cosmo>0
+    nd=1;
     if n == 1;
     d_ref{nd}=trueBe;
     data{nd}.d_ref=trueBe;
@@ -213,6 +214,7 @@ if forward.n_cosmo>0
     data{nd+1}.d_std=trueAl*errorAl;
     data{nd+1}.d_noise= measuredAl-trueAl;
     data{nd+1}.d_obs=measuredAl;
+    nd=2;
 elseif n==2
     d_ref{nd}=trueAl/trueBe;
     data{nd}.d_ref=d_ref{1};
@@ -223,8 +225,6 @@ end
 end
 
 if length(poldepth)>0
-    if nd==1
-        nd=0;end
     d_ref{nd+1}=polage;
     data{nd+1}.d_ref=d_ref{nd+1};
     data{nd+1}.d_std=errorpoli;

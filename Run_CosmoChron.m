@@ -210,14 +210,16 @@ if  length(R)>1 % Variable correlation range
 end
 
 % SETUP DATA
-nd=1; % index of data
+nd=0; % index of data
 if forward.n_cosmo>0
+    nd=1;
     if n == 1;
     data{nd}.d_std=uncertaintes_10Be(:);
     data{nd}.d_obs=Be(:);
 
     data{nd+1}.d_std=uncertaintes_26Al(:);
     data{nd+1}.d_obs=Al(:);
+    nd=2;
     else
     % Here I use error propagation
     data{nd}.d_std=sqrt((1./Be(:)).^2.*uncertaintes_26Al(:).^2 + (Al(:)./Be(:).^2).^2.*uncertaintes_10Be(:).^2);
@@ -226,8 +228,6 @@ if forward.n_cosmo>0
 end
 
 if length(forward.poldepth)>0
-    if nd==1
-        nd=0;end
     data{nd+1}.d_std=uncertaintes_direct_age_constraints(:);
     data{nd+1}.d_obs=direct_age_constraints(:);
 end
@@ -506,4 +506,4 @@ CosmoChron_68Upper=prctile(1./acrate',84.1)';
 CosmoChron_95Upper=prctile(1./acrate',97.7)';
 CosmoChron_Depth=depth2';
 T2 = table(CosmoChron_Depth,CosmoChron_95Lower,CosmoChron_68Lower,CosmoChron_Median,CosmoChron_68Upper,CosmoChron_95Upper);
-writetable(T2,'accumulation rates')
+writetable(T2,'accumulation_rates')
