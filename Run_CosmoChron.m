@@ -372,10 +372,10 @@ end
 
 if length(depth_of_comogenic_nuclides)>0
     if  n==1
-        al=al(:,1:nrburn)';
-        be=be(:,1:nrburn)';
+        al=al(:,nrburn:end)';
+        be=be(:,nrburn:end)';
     else
-       albe=albe(:,1:nrburn)';
+       albe=albe(:,nrburn:end)';
     end
 end
 

@@ -365,10 +365,10 @@ end
 
 if length(truedepth)>0
     if  n==1
-        al=al(1,1:nrburn);
-        be=be(1,1:nrburn);
+        al=al(1,nrburn:end);
+        be=be(1,nrburn:end);
     else
-       albe= albe(1,1:nrburn);
+       albe= albe(1,nrburn:end);
     end
 end
 
