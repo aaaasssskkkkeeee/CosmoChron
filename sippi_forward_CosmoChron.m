@@ -52,11 +52,11 @@ end
 
 
 if forward.n_cosmo>0 & length(forward.poldepth)>0 & forward.data==1
-    [d{1},d{2},d{3}]=CosmoChron_forward(acr(:)', preburial,top_age,hiatus,forward.truedepth,forward.poldepth,forward.production,forward.ds,forward.data,forward.preburial,forward.rho,forward.debe,forward.deal,forward.dd);
+    [d{1},d{2},d{3}]=CosmoChron_forward(acr(:)', preburial,top_age,hiatus(:),forward.truedepth,forward.poldepth,forward.production,forward.ds,forward.data,forward.preburial,forward.rho,forward.debe,forward.deal,forward.dd);
 elseif forward.n_cosmo==0 & length(forward.poldepth)>0 
-    [d{1}]=CosmoChron_forward(acr(:)', preburial,top_age, hiatus,forward.truedepth,forward.poldepth,forward.production,forward.ds,forward.data,forward.preburial,forward.rho,forward.debe,forward.deal,forward.dd,forward);
+    [d{1}]=CosmoChron_forward(acr(:)', preburial,top_age, hiatus(:),forward.truedepth,forward.poldepth,forward.production,forward.ds,forward.data,forward.preburial,forward.rho,forward.debe,forward.deal,forward.dd,forward);
 elseif forward.n_cosmo>0 & forward.data==2 & length(forward.poldepth)==0
-    [d{1}]=CosmoChron_forward(acr(:)', preburial,top_age,hiatus,forward.truedepth,forward.poldepth,forward.production,forward.ds,forward.data,forward.preburial,forward.rho,forward.debe,forward.deal,forward.dd);
+    [d{1}]=CosmoChron_forward(acr(:)', preburial,top_age,hiatus(:),forward.truedepth,forward.poldepth,forward.production,forward.ds,forward.data,forward.preburial,forward.rho,forward.debe,forward.deal,forward.dd);
 else
-    [d{1},d{2}]=CosmoChron_forward(acr(:)', preburial,top_age,hiatus,forward.truedepth,forward.poldepth,forward.production,forward.ds,forward.data,forward.preburial,forward.rho,forward.debe,forward.deal,forward.dd);
+    [d{1},d{2}]=CosmoChron_forward(acr(:)', preburial,top_age,hiatus(:),forward.truedepth,forward.poldepth,forward.production,forward.ds,forward.data,forward.preburial,forward.rho,forward.debe,forward.deal,forward.dd);
 end

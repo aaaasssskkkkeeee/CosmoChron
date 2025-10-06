@@ -25,12 +25,12 @@ R =  [10 30];              % Correlation range (m) if length(R)=1 the fixed rang
 res =  R(1)/3;          % resolution in depth, should be <=R(1)/3 (m)
 
 % Difine hiatus
-Depth_of_hiatus = [40 75];          % (m) if Depth_of_hiatus = [] no hiatus.
+Depth_of_hiatus = [30 50];          % (m) if Depth_of_hiatus = [] no hiatus.
 duration_of_hiatus = [10 400];         % Duration of the hiatus (ka)
 h_correlated = 1;                      % if h_correlated=1 then the accumulations rates before and after each hiati are correlated, elles they are not. Note that the code does not work when h_correlated = 0, while including hiasuses and a variable R
 
 % pre-burial settings
-n2= 1;                  % if n2=1 complex preburial history , if n2=2 simple (norm distributed steady erotion rate)
+n2= 2;                  % if n2=1 complex preburial history , if n2=2 simple (norm distributed steady erotion rate)
 pf= 2;                  % prior distibution of erotion rate, if 1 normal, if 2 uniform, only have effect if n2=2
 simple=[0.001 0.05];    % if pf=1 mean and std, if pf=2 min max erotion rate, only have effect if n2=2
 
@@ -330,10 +330,10 @@ else
 end
 
 %%
-tat = diff(dd).*acr(nrburn:end,:); %  durating of each interval (kyr)
-tat(:,1)=top_age(nrburn:end);
+tat = diff(dd).*acr; %  durating of each interval (kyr)
+tat(:,1)=top_age;
 if length(hiatus)>0
-    tat(:,isnan(tat(1,:))) = hiatus(nrburn:end,:);
+    tat(:,isnan(tat(1,:))) = hiatus;
 end
 age=[cumsum(tat')]; % true age (kyr)
 acrate=tat(2:end,2:end)'./diff(dd(2:end))';
@@ -341,6 +341,7 @@ depth=dd(2:end);
 
 
 % get forward response to data
+
 for i=1:length(reals_all{1}(:,1))
     if length(R)>1
         ost=1;else; ost=0; end
@@ -363,21 +364,13 @@ for i=1:length(reals_all{1}(:,1))
     end
 end
 
-if length(truedepth)>0
-    if  n==1
-        al=al(1,nrburn:end);
-        be=be(1,nrburn:end);
-    else
-       albe= albe(1,nrburn:end);
-    end
-end
 
 % plot histogram of hiatus estimations
 if nrhiatus>0
     figure; lhrealindex=diff(truedd(2:end));acrreal=diff(trueage);lhreal=acrreal(lhrealindex==0);
-    lmuh=prctile(hiatus(nrburn:end,:),15.9);muh=prctile(hiatus(nrburn:end,:),50);umuh=prctile(hiatus(nrburn:end,:),84.1);
+    lmuh=prctile(hiatus,15.9);muh=prctile(hiatus,50);umuh=prctile(hiatus,84.1);
 for i=1:nrhiatus
-    subplot(1,nrhiatus,i);histogram(hiatus(nrburn:end,i),'Normalization','pdf')
+    subplot(1,nrhiatus,i);histogram(hiatus(:,i),'Normalization','pdf')
     set(gca,'YTick',[]);xlabel('Duration (ka)')
     hold on; plot(lhreal(i),0,'r.','MarkerSize',30); title(['Hiatus ' num2str(i) ' ' num2str(round(muh(i))) '+' num2str(round(umuh(i)-muh(i))) '-' num2str(round(muh(i)-lmuh(i))) ' ka'])
     xlim([duration_of_hiatus(1) duration_of_hiatus(2)])
@@ -438,10 +431,10 @@ end
 
 
 h(3)=subplot(133);hold on; 
-for ia= 1: length(hiatus(1,:))+1
+for ia= 1: size(hiatus,2)+1
 fill([prctile(age(sheja(ia):eheja(ia),:)',97.7), prctile(age(eheja(ia):-1:sheja(ia),:)',2.3)],[depth(sheja(ia):eheja(ia)), depth(eheja(ia):-1:sheja(ia))],[0 0.4470 0.7410],'EdgeColor',[1 1 1],'EdgeAlpha',0.1,'FaceAlpha',0.15)
 fill([prctile(age(sheja(ia):eheja(ia),:)',84.1), prctile(age(eheja(ia):-1:sheja(ia),:)',15.9)],[depth(sheja(ia):eheja(ia)), depth(eheja(ia):-1:sheja(ia))],[0 0.4470 0.7410],'EdgeColor',[1 1 1],'EdgeAlpha',0.1,'FaceAlpha',0.25)
-plot(prctile(age(sheja(ia):eheja(ia),:)',50),depth','k','LineWidth',1.5);
+plot(prctile(age(sheja(ia):eheja(ia),:)',50),depth(sheja(ia):eheja(ia))','k','LineWidth',1.5);
 end
 
 
@@ -506,50 +499,7 @@ fill([prctile(1./acrate',84.1), prctile(1./acrate(end:-1:1,:)',15.9)],[depth2, d
 plot(prctile(1./acrate',50),depth2','k','LineWidth',1.5);
 xlabel('Accumulation rate (m/ka)');ylabel('Depth (m)');set(gca,'Ydir','reverse')
 
-%% save age-depth model and posterior data
-
-if forward.n_cosmo>0 & n==1
-CosmoChron_95Lower=prctile(age',2.3)';
-CosmoChron_68Lower=prctile(age',15.9)';
-CosmoChron_Median=prctile(age',50)';
-CosmoChron_68Upper=prctile(age',84.1)';
-CosmoChron_95Upper=prctile(age',97.7)';
-CosmoChron_Depth=depth';
-
-Al_95Lower=prctile(al(:,i),2.3);
-Al_68Lower=prctile(al(:,i),15.9);
-Al_Median=prctile(al(:,i),50);
-Al_68Upper=prctile(al(:,i),84.1);
-Al_95Upper=prctile(al(:,i),97.7);
-
-Be_95Lower=prctile(be(:,i),2.3);
-Be_68Lower=prctile(be(:,i),15.9);
-Be_Median=prctile(be(:,i),50);
-Be_68Upper=prctile(be(:,i),84.1);
-Be_95Upper=prctile(be(:,i),97.7);
-
-T = table(CosmoChron_Depth,CosmoChron_95Lower,CosmoChron_68Lower,CosmoChron_Median,CosmoChron_68Upper,CosmoChron_95Upper,Al_95Lower,Al_68Lower,Al_Median,Al_68Upper,Be_95Upper,Be_95Lower,Be_68Lower,Be_Median,Be_68Upper,Be_95Upper);
-writetable(T,filename,'Sheet',1,'Range','D1')
-
-elseif forward.n_cosmo>0 & n==2
-
-CosmoChron_95Lower=prctile(age',2.3)';
-CosmoChron_68Lower=prctile(age',15.9)';
-CosmoChron_Median=prctile(age',50)';
-CosmoChron_68Upper=prctile(age',84.1)';
-CosmoChron_95Upper=prctile(age',97.7)';
-CosmoChron_Depth=depth';
-
-Al_Be_95Lower=prctile(albe(:,i),2.3);
-Al_Be_68Lower=prctile(albe(:,i),15.9);
-Al_Be_Median=prctile(albe(:,i),50);
-Al_Be_68Upper=prctile(albe(:,i),84.1);
-Al_Be_95Upper=prctile(albe(:,i),97.7);
-
-T = table(CosmoChron_Depth,CosmoChron_95Lower,CosmoChron_68Lower,CosmoChron_Median,CosmoChron_68Upper,CosmoChron_95Upper,Al_Be_95Lower,Al_Be_68Lower,Al_Be_Median,Al_Be_68Upper);
-writetable(T,filename)
-
-else
+%% save the age-depth model
 
 CosmoChron_95Lower=prctile(age',2.3)';
 CosmoChron_68Lower=prctile(age',15.9)';
@@ -560,4 +510,12 @@ CosmoChron_Depth=depth';
 T = table(CosmoChron_Depth,CosmoChron_95Lower,CosmoChron_68Lower,CosmoChron_Median,CosmoChron_68Upper,CosmoChron_95Upper);
 writetable(T,filename)
 
-end
+%% accumulation rates
+CosmoChron_95Lower=prctile(1./acrate',2.3)';
+CosmoChron_68Lower=prctile(1./acrate',15.9)';
+CosmoChron_Median=prctile(1./acrate',50)';
+CosmoChron_68Upper=prctile(1./acrate',84.1)';
+CosmoChron_95Upper=prctile(1./acrate',97.7)';
+CosmoChron_Depth=depth2';
+T2 = table(CosmoChron_Depth,CosmoChron_95Lower,CosmoChron_68Lower,CosmoChron_Median,CosmoChron_68Upper,CosmoChron_95Upper);
+writetable(T2,'accumulation_rates')
