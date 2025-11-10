@@ -1,5 +1,5 @@
 # CosmoChron user guide
-For detailed information see: CosmoChron: A versatile age-depth modeling approach using cosmogenic nuclides and direct age constraints, https://doi.org/10.1016/j.quageo.2024.101618
+For detailed information see: Sørensen, A.L., Hansen, T.M., Nørgaard, J., Buylaert, J.-P., Murray, A.S., Kulakova, E., Kurbanov, R., Knudsen, M.F., 2024. CosmoChron: A versatile age-depth modeling approach using cosmogenic nuclides and direct age constraints. Quat. Geochronol. 85, 101618. https://doi.org/10.1016/j.quageo.2024.101618
 
 # Initial
 To utilize CosmoChron, you must download the mGstat: https://github.com/cultpenguin/mGstat and the SIPPI toolbox from https://github.com/cultpenguin/sippi and add it to your path by running the following commands in the MATLAB command window:
