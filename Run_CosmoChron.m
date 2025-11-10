@@ -1,6 +1,6 @@
 clear all;close all;clc;
 
-% Make sure to download sippi https://github.com/cultpenguin/sippi and add to
+% Make sure to download mGstat: https://github.com/cultpenguin/mGstat and sippi https://github.com/cultpenguin/sippi and add to
 % path by running: (in the command window):
 % >> addpath sippi
 % then run >> sippi_set_path
@@ -506,4 +506,5 @@ CosmoChron_68Upper=prctile(1./acrate',84.1)';
 CosmoChron_95Upper=prctile(1./acrate',97.7)';
 CosmoChron_Depth=depth2';
 T2 = table(CosmoChron_Depth,CosmoChron_95Lower,CosmoChron_68Lower,CosmoChron_Median,CosmoChron_68Upper,CosmoChron_95Upper);
+
 writetable(T2,'accumulation_rates')
