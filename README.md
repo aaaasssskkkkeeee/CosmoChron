@@ -1,12 +1,12 @@
 # CosmoChron user guide
 For detailed information see: CosmoChron: A versatile age-depth modeling approach using cosmogenic nuclides and direct age constraints, https://doi.org/10.1016/j.quageo.2024.101618
 
-Important
+# Initial
 To utilize CosmoChron, you must download the mGstat: https://github.com/cultpenguin/mGstat and the SIPPI toolbox from https://github.com/cultpenguin/sippi and add it to your path by running the following commands in the MATLAB command window:
 >> addpath sippi
 then run >> sippi_set_path
 
-Scripts
+# Scripts
 The main branch contains seven MATLAB scripts:
 1.	Run_CosmoChron.m
 o	This script runs CosmoChron. You can either type in or import your data. All settings are listed and described at the top of the script.
@@ -24,10 +24,10 @@ o	This script changes the format of the settings in scripts 1-4 to be suitable f
 7.	SimpleBurialBalcoMCMC.m
 o	This script calculates simple burial ages using the Metropolis algorithm, as described in the caption for figure S8 in the supplementary material.
 
-Getting Production Rates
+# Production rates at the burial site
 To obtain production rates and attenuation lengths for a specific burial location (as detail in the paper), go to the Get-production-rate folder/branch: https://github.com/aaaasssskkkkeeee/CosmoChron/tree/Get-production-rate and download the folder. Run AlBe_production_rate(elevation, latitude, longitude) in the command window or at the top of getproduction_rate_and_plots.m.
 Here, elevation is in meters, and latitude and longitude are in degrees. This will generate a file called b.m, which contains all the production rates and attenuation lengths. Move or copy b.m into your main folder to use these values in CosmoChron.
 
-Complex Pre-Burial History
+# Complex Pre-Burial History
 To apply a complex pre-burial history for CosmoChron, download the P-PINI tool from https://github.com/cosmoJesper/PPINI. Then run MC_AlBe_source_final.m using your desired settings. This script generates a file called mc_source.mat, which should be placed in your main folder to utilize. Set n2=1 to apply these complex pre-burial settings in CosmoChron.
 
